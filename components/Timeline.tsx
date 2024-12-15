@@ -86,19 +86,9 @@ export const Timeline = () => {
         (node) => new Date(node.data.date).getFullYear() === year
       );
 
-      console.log(nodes.map((node) => new Date(node.data.date).getFullYear()));
-
-      console.log(yearNodes);
-
       if (yearNodes.length > 0) {
         const xPositions = yearNodes.map((node) => node.position.x);
         const minX = Math.min(...xPositions);
-
-        console.log(minX);
-
-        const allPositions = nodes.map((node) => node.position.x);
-
-        console.log(allPositions);
 
         setViewport({
           x: 0 - minX,
