@@ -83,15 +83,25 @@ export const Timeline = () => {
   const zoomToYear = useCallback(
     (year: number) => {
       const yearNodes = nodes.filter(
-        (node) => new Date(node.data.date as Date).getFullYear() === year
+        (node) => new Date(node.data.date).getFullYear() === year
       );
+
+      console.log(nodes.map((node) => new Date(node.data.date).getFullYear()));
+
+      console.log(yearNodes);
 
       if (yearNodes.length > 0) {
         const xPositions = yearNodes.map((node) => node.position.x);
         const minX = Math.min(...xPositions);
 
+        console.log(minX);
+
+        const allPositions = nodes.map((node) => node.position.x);
+
+        console.log(allPositions);
+
         setViewport({
-          x: minX,
+          x: 0 - minX,
           y: 0,
           zoom: 1.5,
         });
