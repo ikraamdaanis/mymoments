@@ -1,7 +1,7 @@
 "use client";
 
+import { Handle, Position } from "@xyflow/react";
 import { memo } from "react";
-import { Handle, Position } from "reactflow";
 import { TimelineEvent } from "types";
 
 function Node({ data }: { data: TimelineEvent }) {

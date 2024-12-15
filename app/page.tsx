@@ -1,7 +1,7 @@
 "use client";
 
+import { ReactFlowProvider } from "@xyflow/react";
 import { Timeline } from "components/Timeline";
-import { ReactFlowProvider } from "reactflow";
 
 export default function Home() {
   return (

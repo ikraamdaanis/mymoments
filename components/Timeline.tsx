@@ -1,15 +1,18 @@
 "use client";
 
-import { TimelineNode } from "components/TimelineNode";
-import { useCallback } from "react";
-import ReactFlow, {
+import {
   Background,
   Controls,
+  Edge,
   MiniMap,
+  Node,
   NodeTypes,
+  ReactFlow,
   useReactFlow,
-} from "reactflow";
-import "reactflow/dist/style.css";
+} from "@xyflow/react";
+import "@xyflow/react/dist/style.css";
+import { TimelineNode } from "components/TimelineNode";
+import { useCallback, useMemo } from "react";
 import { TimelineEvent } from "types";
 
 const nodeTypes: NodeTypes = {
@@ -41,32 +44,40 @@ const events: TimelineEvent[] = [
   // Add more events
 ];
 
-const nodes = events.map((event, index) => ({
-  id: event.id,
-  type: "timelineEvent",
-  data: event,
-  position: {
-    x: index * 300,
-    y: event.category === "life-event" ? 0 : 100,
-  },
-}));
-
-const edges = events.slice(0, -1).map((event, index) => ({
-  id: `e${event.id}-${events[index + 1].id}`,
-  source: event.id,
-  target: events[index + 1].id,
-  type: "smoothstep",
-  animated: true,
-}));
-
 export const Timeline = () => {
   // Handle zooming to specific time periods
   const { setViewport, fitView } = useReactFlow();
 
+  const nodes: Node[] = useMemo(
+    () =>
+      events.map((event, index) => ({
+        id: event.id,
+        type: "timelineEvent",
+        data: event as unknown as Record<string, unknown>,
+        position: {
+          x: index * 300,
+          y: event.category === "life-event" ? 0 : 100,
+        },
+      })),
+    []
+  );
+
+  const edges: Edge[] = useMemo(
+    () =>
+      events.slice(0, -1).map((event, index) => ({
+        id: `e${event.id}-${events[index + 1].id}`,
+        source: event.id,
+        target: events[index + 1].id,
+        type: "smoothstep",
+        animated: true,
+      })),
+    []
+  );
+
   const zoomToYear = useCallback(
     (year: number) => {
       const yearNodes = nodes.filter(
-        (node) => new Date(node.data.date).getFullYear() === year
+        (node) => new Date(node.data.date as Date).getFullYear() === year
       );
 
       if (yearNodes.length > 0) {
@@ -80,7 +91,7 @@ export const Timeline = () => {
         });
       }
     },
-    [setViewport]
+    [nodes, setViewport]
   );
 
   return (
@@ -99,13 +110,12 @@ export const Timeline = () => {
           View All
         </button>
       </div>
-
       <ReactFlow
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
         fitView
-        className="bg-gray-50"
+        className="bg-gray-500"
       >
         <Background />
         <Controls />
