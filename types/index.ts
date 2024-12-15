@@ -1,4 +1,4 @@
-export interface TimelineEvent {
+export interface TimelineEvent extends Record<string, unknown> {
   id: string;
   date: Date;
   title: string;

@@ -41,19 +41,25 @@ const events: TimelineEvent[] = [
     description: "Went to the mall",
     category: "regular-event",
   },
-  // Add more events
+  {
+    id: "3",
+    date: new Date("2024-12-26"),
+    title: "Shopping",
+    description: "Went to the mall",
+    category: "regular-event",
+  },
 ];
 
 export const Timeline = () => {
   // Handle zooming to specific time periods
   const { setViewport, fitView } = useReactFlow();
 
-  const nodes: Node[] = useMemo(
+  const nodes: Node<TimelineEvent>[] = useMemo(
     () =>
       events.map((event, index) => ({
         id: event.id,
         type: "timelineEvent",
-        data: event as unknown as Record<string, unknown>,
+        data: event,
         position: {
           x: index * 300,
           y: event.category === "life-event" ? 0 : 100,
